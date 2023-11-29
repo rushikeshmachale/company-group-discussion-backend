@@ -1,99 +1,154 @@
-import React, { useState } from 'react'
+import React, {  useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Info from "./Info";
+import GroupEmployeeService from "../services/GroupEmployeeService";
 
-const DashBoard = ({role}) => {
+const DashBoard = () => {
 
-    const [message, setMessage] = useState('');
+  const navigate = useNavigate()
+  const [showInfo, setShowInfo] = useState(false);
+  const[employees,setEmployees] = useState([]);
 
-  const handleSend = () => {
-    // Add functionality to handle sending messages
-    // For example, you can send messages to a chat server or update state
-    console.log('Message sent:', message);
+  useEffect(()=>{
+    getEmployeesByGroupId(1);
+  },[])
+
+  const handleInfo = async () => {
+    try {
+      const employeesData2 = await getEmployeesByGroupId(1);
+      setEmployees(employeesData2);
+      setShowInfo(true);
+    } catch (error) {
+      console.log("Error in getting employees:", error);
+      setShowInfo(false); // Ensure to set showInfo to false in case of error
+    }
   };
 
-  const handleDelete = () => {
-    // Add functionality to handle delete
-    alert('Deleted');
+
+
+  
+
+  const closeInfo = () => {
+    setShowInfo(false);
   };
 
-  const handleUpdate = () => {
-    // Add functionality to handle update
-    alert('Updated');
-  };
+
+  const handleCreate = ( )=>{
+
+    navigate('create');
+    
+
+  }
+  const handleUpdate = ( )=>{
+
+    navigate('update');
+    
+
+  }
+
+  
+
+  
+  
+  const handleLogout=()=>{
+
+    navigate('/')
+  }
+
+
+  const getEmployeesByGroupId= async(group_id)=>{
+    try {
+
+      const employeesData = await GroupEmployeeService.getAllEmployeesByGroupId(group_id);
+      console.log("Employees in group",employeesData);
+      return employeesData;
+
+      
+    } catch (error) {
+      console.log("Error in getting employees:" , error);
+      return [];
+    }
+
+  }
+
+  
+
+
   return (
-    <div className="container mt-5">
-    <div className="row">
-      {role === 'admin' && (
-        <div className="col-md-6">
-          <div className="p-3 mb-3" style={{ border: '1px solid black' }}>
-            <h2>Admin Functional Groups</h2>
-            <div className="list-group" id="functionalGroups">
-              <div className="list-group-item d-flex justify-content-between align-items-center">
-                Sample Admin Functional Group 1
-                <div>
-                  <button className="btn btn-sm btn-primary mr-2" onClick={handleUpdate}>
-                    Update
-                  </button>
-                  <button className="btn btn-sm btn-danger" onClick={handleDelete}>
-                    Delete
-                  </button>
+  <div>
+     <div className="container-fluid h-100">
+       <div className="row h-100">
+
+         <div className="col-12 top-div d-flex align-items-center justify-content-between px-3">
+            <div className="w-25">
+                <span>Hello user!</span>
+            </div>
+            <div className="w-75 text-left d-flex align-items-center justify-content-between">
+                <span>Group Name!!</span>
+            <div>
+                <button className="btn btn-info" onClick={handleInfo}>Info</button>
+               <button className="btn btn-success m-2" onClick={handleUpdate} >Update</button>
+               <button className="btn btn-danger " onClick={handleLogout} >Logout</button>
+                         
+            </div>
+            </div>
+        </div>
+
+        {showInfo && (
+          <div className="modal fade show" style={{ display: 'block' }}>
+            <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '33.33%', width: '100%' }}>
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Info</h5>
+                  <button type="button" className="btn-close" aria-label="Close" onClick={closeInfo}></button>
+                </div>
+                <div className="modal-body">
+                  <Info employees={employees}  /> {/* Render Info component */}
                 </div>
               </div>
-              {/* Add more admin functional groups here */}
             </div>
-            <button className="btn btn-primary mt-3">Add Admin Functional Group</button>
           </div>
-        </div>
-      )}
+        )}
 
-      {role === 'admin' && (
-        <div className="col-md-6">
-          <div className="p-3 mb-3" style={{ border: '1px solid black' }}>
-            <h2>Admin Technical Groups</h2>
-            <div className="list-group" id="technicalGroups">
-              <div className="list-group-item d-flex justify-content-between align-items-center">
-                Sample Admin Technical Group 1
-                <div>
-                  <button className="btn btn-sm btn-primary mr-2" onClick={handleUpdate}>
-                    Update
-                  </button>
-                  <button className="btn btn-sm btn-danger" onClick={handleDelete}>
-                    Delete
-                  </button>
+         <div className="col-md-3 sidebar">
+                <div className="px-3 py-4 d-flex flex-column justify-content-between sidebartable" >
+                    <div>
+                        <input type="text" className="form-control mb-3" placeholder="Search..."/>
+                        <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Groups</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Group 1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                   <button className="btn btn-primary btn-block mt-3" onClick={handleCreate} >Create Group</button>
                 </div>
-              </div>
-              {/* Add more admin technical groups here */}
             </div>
-            <button className="btn btn-primary mt-3">Add Admin Technical Group</button>
-          </div>
-        </div>
-      )}
 
-      <div className="col-md-3 border-end">
-        <h4>Members</h4>
-        {/* ... (Your existing code for members) */}
-      </div>
+            <div className="col-md-9 chat-window">
+                <div className="chat-messages border-bottom mb-3">
+                    {/* <!-- Sample Messages (replace with actual chat content) --> */}
+                    <div className="message">Sample Message 1</div>
+                    <div className="message">Sample Message 2</div>
+                    <div className="message">Sample Message 3</div>
+                    {/* <!-- Add more messages here --> */}
+                </div>
+                <div className="d-flex">
+                    <input type="text" className="form-control m-1" placeholder="Type a message..."/>
+                    <button className="btn btn-primary m-1 ">Send</button>
+                </div>
+            </div>
 
-      <div className="col-md-9">
-        <h4>Chat</h4>
-        <div className="chat-area border">
-          {/* ... (Your existing code for chat messages) */}
         </div>
-        <div className="input-group mt-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Type your message..."
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-          />
-          <button className="btn btn-primary" onClick={handleSend}>
-            Send
-          </button>
-        </div>
-      </div>
 
      
-    </div>
+  </div>
   </div>
   )
 }

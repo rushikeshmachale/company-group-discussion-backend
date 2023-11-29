@@ -1,37 +1,17 @@
 package com.excelr.service;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.excelr.entity.Employee;
-import com.excelr.repository.EmployeeRepository;
 
-@Service
-public class EmployeeService {
+public interface EmployeeService {
+
+	String getRoleByUsername(String username, String password);
+
+	boolean validateLogin(String username, String password);
+
+	List<Employee> gelAllEmps();
 	
-	@Autowired
-	EmployeeRepository employeeRepository;
-	
-	public String getRoleByUsername(String username,String password) {
-		
-		Optional<Employee> employeeOptional = employeeRepository.findByUsernameAndPassword(username, password);
-		
-		return employeeOptional.map(Employee::getRole).orElse(null);
-	}
-	
-	public boolean validateLogin(String username,String password) {
-		
-		Employee employee = employeeRepository.findByUsernameAndPassword(username, password).orElse(null);
-		
-		return employee != null;
-	}
-	
-	public List<Employee> gelAllEmps(){
-		
-		return employeeRepository.findAll();
-	}
+	Employee getEmployeeById(int id);
 
 }

@@ -6,7 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import com.excelr.entity.MyGroup;
 
+import java.util.List;
+
 @Repository
-public interface GroupRepository extends JpaRepository<MyGroup, Integer> {
+public interface MyGroupRepository extends JpaRepository<MyGroup, Integer> {
+	List<MyGroup> findByType(String type);
 
 }
