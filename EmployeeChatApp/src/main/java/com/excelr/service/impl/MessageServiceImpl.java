@@ -8,26 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excelr.entity.Messages;
+import com.excelr.entity.MyGroup;
 import com.excelr.repository.MessageRepository;
+import com.excelr.repository.MyGroupRepository;
 
 @Service
 public class MessageServiceImpl implements MessageService {
 	
 	@Autowired
 	MessageRepository messageRepository;
+	
+	@Autowired
+	MyGroupRepository myGroupRepository;
 
-	@Override
-	public Messages addMessage(Messages message) {
-		
-		Messages messages = messageRepository.save(message);
-		return messages;
-	}
-
-	@Override
-	public List<Messages> getAllMessages() {
-		return messageRepository.findAll();
-	}
-
+	
+	
 	@Override
 	public Messages getMessageById(int id) {
 		Optional<Messages> optionalMessage = messageRepository.findById(id);
@@ -72,6 +67,22 @@ public class MessageServiceImpl implements MessageService {
 		}
 	 return msg;	
 		
+	}
+
+
+//	@Override
+//	public List<Messages> getAllMessagesByGroupId(int groupid) {
+//		MyGroup group = myGroupRepository.findById(groupid).get();
+//		if(group!=null) {
+//			return group.getMessages();
+//		}
+//		return null;
+//	}
+
+	@Override
+	public Messages addMessage(Messages message) {
+		Messages messages = messageRepository.save(message);
+		return messages;
 	}
 
 }

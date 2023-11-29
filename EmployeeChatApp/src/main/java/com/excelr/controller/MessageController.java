@@ -37,11 +37,12 @@ public class MessageController {
 		
 	}
 	
-	@GetMapping("/message")
-	public ResponseEntity<List<Messages>> getAllMessages(){
-		return new ResponseEntity<List<Messages>>(messageService.getAllMessages(),HttpStatus.OK);
-		
-	}
+//	@GetMapping("/message")
+//	public ResponseEntity<List<Messages>> getAllMessages(int id){
+//		return new ResponseEntity<List<Messages>>(messageService.getAllMessagesByGroupId(id),HttpStatus.OK);
+//		
+//	}
+	
 	@GetMapping("/message/{id}")
 	public ResponseEntity<Messages> getMessageById(@PathVariable int id)
 	{
