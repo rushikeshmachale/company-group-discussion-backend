@@ -1,55 +1,21 @@
-
+// MyGroupService.java (interface)
 package com.excelr.service;
 
 import com.excelr.entity.MyGroup;
-import com.excelr.repository.MyGroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
+public interface MyGroupService {
 
-public class MyGroupService {
+    List<MyGroup> getAllGroups();
 
-    private final MyGroupRepository MygroupRepository;
+    MyGroup getGroupById(int id);
 
-    @Autowired
-    public MyGroupService(MyGroupRepository MygroupRepository) {
-        this.MygroupRepository = MygroupRepository;
-    }
+    void createGroup(MyGroup group);
 
-    public List<MyGroup> getAllGroups() {
-        return MygroupRepository.findAll();
-    }
+    void updateGroup(MyGroup group);
 
-    public MyGroup getGroupById(int id) {
-        return MygroupRepository.findById(id).orElse(null);
-    }
+    void deleteGroupById(int id);
 
-    public void createGroup(MyGroup group) {
-        // You may want to add validation or business logic before saving
-        MygroupRepository.save(group);
-    }
-
-    public void updateGroup(MyGroup group) {
-        if (MygroupRepository.existsById(group.getId())) {
-            // You may want to add validation or business logic before updating
-            MygroupRepository.save(group);
-        } else {
-            // Handle the case where the group doesn't exist
-            throw new IllegalArgumentException("Group with ID " + group.getId() + " not found");
-        }
-    }
-
-    public void deleteGroupById(int id) {
-        if (MygroupRepository.existsById(id)) {
-            MygroupRepository.deleteById(id);
-        } else {
-            // Handle the case where the group doesn't exist
-            throw new IllegalArgumentException("Group with ID " + id + " not found");
-        }
-    }
+    List<MyGroup> findByType(String type);
 }
