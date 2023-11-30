@@ -1,6 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import GroupEmployeeService from '../services/GroupEmployeeService';
 
-const Info = ({ employees}) => {
+const Info = () => {
+
+  const[employees,setEmployees] = useState([]);
+ 
+
+  useEffect(()=>{
+    getEmployeesByGroupId(1);
+  },[])
+
+
+
+  
+
+  const getEmployeesByGroupId= async(group_id)=>{
+    try {
+
+      const employeesData = await GroupEmployeeService.getAllEmployeesByGroupId(group_id);
+      console.log("Employees in group",employeesData);
+      setEmployees(employeesData)
+      
+
+      
+    } catch (error) {
+      console.log("Error in getting employees:" , error);
+      return [];
+    }
+
+  }
 
     
     

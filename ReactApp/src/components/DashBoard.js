@@ -1,78 +1,32 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Info from "./Info";
-import GroupEmployeeService from "../services/GroupEmployeeService";
+
 
 const DashBoard = () => {
 
+  const[groups,setGroups] = useState([]);
+
+  const employee = useSelector((state)=> state.employeeReducer.employee)
   const navigate = useNavigate()
-  const [showInfo, setShowInfo] = useState(false);
-  const[employees,setEmployees] = useState([]);
 
-  useEffect(()=>{
-    getEmployeesByGroupId(1);
-  },[])
-
-  const handleInfo = async () => {
-    try {
-      const employeesData2 = await getEmployeesByGroupId(1);
-      setEmployees(employeesData2);
-      setShowInfo(true);
-    } catch (error) {
-      console.log("Error in getting employees:", error);
-      setShowInfo(false); // Ensure to set showInfo to false in case of error
-    }
-  };
-
-
-
-  
-
-  const closeInfo = () => {
-    setShowInfo(false);
-  };
-
+ 
 
   const handleCreate = ( )=>{
-
     navigate('create');
-    
-
   }
   const handleUpdate = ( )=>{
-
     navigate('update');
-    
+
 
   }
+  const handleInfo = ( )=>{
+    navigate('info');
+  }
 
-  
-
-  
-  
   const handleLogout=()=>{
-
     navigate('/')
   }
-
-
-  const getEmployeesByGroupId= async(group_id)=>{
-    try {
-
-      const employeesData = await GroupEmployeeService.getAllEmployeesByGroupId(group_id);
-      console.log("Employees in group",employeesData);
-      return employeesData;
-
-      
-    } catch (error) {
-      console.log("Error in getting employees:" , error);
-      return [];
-    }
-
-  }
-
-  
-
 
   return (
   <div>
@@ -81,7 +35,7 @@ const DashBoard = () => {
 
          <div className="col-12 top-div d-flex align-items-center justify-content-between px-3">
             <div className="w-25">
-                <span>Hello user!</span>
+                <span>Hello {employee.username}!</span>
             </div>
             <div className="w-75 text-left d-flex align-items-center justify-content-between">
                 <span>Group Name!!</span>
@@ -94,21 +48,8 @@ const DashBoard = () => {
             </div>
         </div>
 
-        {showInfo && (
-          <div className="modal fade show" style={{ display: 'block' }}>
-            <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '33.33%', width: '100%' }}>
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Info</h5>
-                  <button type="button" className="btn-close" aria-label="Close" onClick={closeInfo}></button>
-                </div>
-                <div className="modal-body">
-                  <Info employees={employees}  /> {/* Render Info component */}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+       
+               
 
          <div className="col-md-3 sidebar">
                 <div className="px-3 py-4 d-flex flex-column justify-content-between sidebartable" >

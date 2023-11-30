@@ -59,6 +59,19 @@ const GroupEmployeeService = {
             throw error.response?error.response.data:error.message;
             
         }
+    },
+
+    getGroupsByEmployeeId:async(employee_id)=>{
+        try{
+
+            const response = await axios.post(`${API_BASE_URL}/getgroups/${employee_id}`);
+            return response.data
+
+        }catch (error){
+
+            throw error.response?error.response.data:error.message;
+
+        }
     }
 
 

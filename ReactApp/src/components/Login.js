@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import EmployeeService from '../services/LoginService';
-import DashBoard from './DashBoard';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+
+
+
 
 const Login = () => {
     const [username,setUsername] = useState('');
     const [password,setPassword] =useState('');
+    const[employee,setEmployee]=useState('');
     const[error,setError] =useState('');
-    const[role,setRole] = useState('');
+    const[role,setRole] = useState(''); 
+
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -20,37 +30,46 @@ const Login = () => {
         event.preventDefault();
 
         try{
-            const fetchRole = await EmployeeService.login(username,password);
-            setRole(fetchRole);
-            setError('');
+            const employee = await EmployeeService.login(username,password);
+            if (employee) {
+              dispatch(setEmployee(employee));
+              setRole(employee.role)
+              setError('');
+              handleNavigate(employee.role); 
+            } else {
+              setError('Role not fetched correctly');
+              setRole(null);
+            }
+            
         }catch(error){
             setError(error);
             setRole(null);
         }
     }
 
-    const handleLogout = () => {
-        setRole(null); // Clear the role state on logout
-    };
+    console.log(role);
 
+   const handleNavigate=(role)=>{
+   if(role==='admin'){
+    navigate('admin/dashboard')
+   }else{
+    navigate('user/dashboard')
+   }
 
+    
+   }
 
   return (
-<div className="container mt-5">
-      <div className="row justify-content-center">
+
+
+
+    <div className="container-fluid">
+      <div className="row justify-content-center h-100">
         <div className="col-md-6">
-          <h2>Login</h2>
-          {role ? (
-            <div>
-              <DashBoard role={role} />
-              <button className="btn btn-danger" onClick={handleLogout}>
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div>
+           <div>
+              <h2>Login</h2>
               {error && <div className="alert alert-danger">{error.toString()}</div>}
-              <form onSubmit={handleLogin}>
+            <form onSubmit={handleLogin}>
                 <div className="mb-3">
                   <label className="form-label">Username:</label>
                   <input
@@ -74,11 +93,13 @@ const Login = () => {
                 <button type="submit" className="btn btn-primary">
                   Login
                 </button>
+                
               </form>
             </div>
-          )}
+          
         </div>
       </div>
+      
     </div>
   )
 }
