@@ -78,6 +78,24 @@ public class GroupEmployeeServiceImpl implements GroupEmployeeService {
 	}
 
 	@Override
+	public List<MyGroup> getAllGroupsByEmployeeId(int employee_id) {
+		Employee employee = employeeRepository.findById(employee_id).orElse(null);
+		if (employee!=null){
+
+			return groupRepository.findByEmployeesContaining(employee);
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<MyGroup> findByEmployeesContaining(Employee employee) {
+		return groupRepository.findByEmployeesContaining(employee);
+	}
+
+
+	@Override
 	@Transactional
 	public void addEmployeesToGroup(int group_id, List<Integer> employee_ids) {
 		MyGroup group = groupRepository.findById(group_id).orElse(null);

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excelr.entity.Messages;
-import com.excelr.entity.MyGroup;
 import com.excelr.repository.MessageRepository;
 import com.excelr.repository.MyGroupRepository;
 
@@ -70,14 +69,10 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 
-//	@Override
-//	public List<Messages> getAllMessagesByGroupId(int groupid) {
-//		MyGroup group = myGroupRepository.findById(groupid).get();
-//		if(group!=null) {
-//			return group.getMessages();
-//		}
-//		return null;
-//	}
+	@Override
+	public List<Messages> getAllMessagesByGroupId(int groupid) {
+		return messageRepository.findByGroup_Id(groupid);
+	}
 
 	@Override
 	public Messages addMessage(Messages message) {

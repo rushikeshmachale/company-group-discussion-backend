@@ -24,18 +24,11 @@ public class EmployeeController  {
 	EmployeeService employeeService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> validateLogin(@RequestParam String username,@RequestParam String password){
+	public ResponseEntity<Employee> validateLogin(@RequestParam String username,@RequestParam String password){
 		
-		boolean isValidLogin = employeeService.validateLogin(username, password);
+		Employee isValidLogin = employeeService.validateLogin(username, password);
 		
-		if(isValidLogin) {
-			
-			String role = employeeService.getRoleByUsername(username, password);
-			return ResponseEntity.ok(role);
-		}
-		else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Username or Password");
-		}
+		return new ResponseEntity<Employee>(isValidLogin,HttpStatus.OK);
 		
 	}
 	

@@ -25,11 +25,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
-	public boolean validateLogin(String username,String password) {
+	public Employee validateLogin(String username,String password) {
 		
 		Employee employee = employeeRepository.findByUsernameAndPassword(username, password).orElse(null);
 		
-		return employee != null;
+		return employee;
 	}
 	
 	@Override

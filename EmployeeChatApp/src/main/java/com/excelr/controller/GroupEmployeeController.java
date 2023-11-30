@@ -2,6 +2,7 @@ package com.excelr.controller;
 
 import java.util.List;
 
+import com.excelr.entity.MyGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,11 @@ public class GroupEmployeeController {
 		}catch (Exception e) {
 			return new ResponseEntity<>("ErrorInRemoveEmpFromGroup",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@PostMapping("getgroups/{id}")
+	public ResponseEntity<List<MyGroup>> getAllGroupsByEmployeeId(@PathVariable int id){
+		return new ResponseEntity<List<MyGroup>>(groupEmployeeService.getAllGroupsByEmployeeId(id),HttpStatus.OK);
 	}
 	
 	

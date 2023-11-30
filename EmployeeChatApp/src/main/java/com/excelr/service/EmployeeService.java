@@ -8,7 +8,7 @@ public interface EmployeeService {
 
 	String getRoleByUsername(String username, String password);
 
-	boolean validateLogin(String username, String password);
+	Employee validateLogin(String username, String password);
 
 	List<Employee> gelAllEmps();
 	
