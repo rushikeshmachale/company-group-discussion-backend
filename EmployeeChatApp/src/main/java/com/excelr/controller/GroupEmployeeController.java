@@ -71,7 +71,7 @@ public class GroupEmployeeController {
 		}
 	}
 
-	@PostMapping("getgroups/{id}")
+	@GetMapping("getgroups/{id}")
 	public ResponseEntity<List<MyGroup>> getAllGroupsByEmployeeId(@PathVariable int id){
 		return new ResponseEntity<List<MyGroup>>(groupEmployeeService.getAllGroupsByEmployeeId(id),HttpStatus.OK);
 	}
