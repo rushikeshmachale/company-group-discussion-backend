@@ -1,8 +1,7 @@
 import React, {  useState } from 'react'
 import EmployeeService from '../services/LoginService';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
+import Cookies from 'js-cookie';
 
 
 
@@ -14,7 +13,6 @@ const Login = () => {
     const[error,setError] =useState('');
     const[role,setRole] = useState(''); 
 
-    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -32,10 +30,12 @@ const Login = () => {
         try{
             const employee = await EmployeeService.login(username,password);
             if (employee) {
-              dispatch(setEmployee(employee));
+             setEmployee(employee);
               setRole(employee.role)
               setError('');
               handleNavigate(employee.role); 
+              Cookies.set('employee',JSON.stringify(employee));
+
             } else {
               setError('Role not fetched correctly');
               setRole(null);
