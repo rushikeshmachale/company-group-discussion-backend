@@ -34,7 +34,7 @@ INSERT INTO Mygroups (name, type) VALUES ('Marketing', 'Functional');
 
 
 
-# insert Employees 
+#insert Employees 
 INSERT INTO employees (username, password, role) VALUES
     ('Admin1', 'adminpass1', 'admin'),
     ('Admin2', 'adminpass2', 'admin'),

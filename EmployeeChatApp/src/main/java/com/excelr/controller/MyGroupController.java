@@ -37,9 +37,9 @@ public class MyGroupController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createGroup(@RequestBody MyGroup group) {
-        myGroupService.createGroup(group);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<MyGroup> createGroup(@RequestBody MyGroup group) {
+
+        return new ResponseEntity<MyGroup>(myGroupService.createGroup(group),HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

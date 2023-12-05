@@ -11,7 +11,7 @@ public interface MyGroupService {
 
     MyGroup getGroupById(int id);
 
-    void createGroup(MyGroup group);
+   MyGroup createGroup(MyGroup group);
 
     void updateGroup(MyGroup group);
 

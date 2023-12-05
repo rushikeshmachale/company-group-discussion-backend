@@ -31,9 +31,9 @@ public class MyGroupServiceImpl implements MyGroupService {
     }
 
     @Override
-    public void createGroup(MyGroup group) {
+    public MyGroup createGroup(MyGroup group) {
         // You may want to add validation or business logic before saving
-        myGroupRepository.save(group);
+        return myGroupRepository.save(group);
     }
 
     @Override
