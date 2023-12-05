@@ -22,12 +22,21 @@ public class MyGroupServiceImpl implements MyGroupService {
 
     @Override
     public List<MyGroup> getAllGroups() {
-        return myGroupRepository.findAll();
+        try {
+            return myGroupRepository.findAll();
+        } catch (Exception e) {
+            // Handle the exception (log it or rethrow, depending on your needs)
+            throw new RuntimeException("Error while fetching all groups", e);
+        }
     }
 
     @Override
     public MyGroup getGroupById(int id) {
-        return myGroupRepository.findById(id).orElse(null);
+        try {
+            return myGroupRepository.findById(id).orElse(null);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while fetching group by ID " + id, e);
+        }
     }
 
     @Override
@@ -38,29 +47,43 @@ public class MyGroupServiceImpl implements MyGroupService {
 
     @Override
     public void updateGroup(MyGroup group) {
-        if (myGroupRepository.existsById(group.getId())) {
-            // You may want to add validation or business logic before updating
-            myGroupRepository.save(group);
-        } else {
-            // Handle the case where the group doesn't exist
-            throw new IllegalArgumentException("Group with ID " + group.getId() + " not found");
+        try {
+            if (myGroupRepository.existsById(group.getId())) {
+                // You may want to add validation or business logic before updating
+                myGroupRepository.save(group);
+            } else {
+                // Handle the case where the group doesn't exist
+                throw new IllegalArgumentException("Group with ID " + group.getId() + " not found");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error while updating group", e);
         }
     }
 
     @Override
     public void deleteGroupById(int id) {
-        if (myGroupRepository.existsById(id)) {
-            myGroupRepository.deleteById(id);
-        } else {
-            // Handle the case where the group doesn't exist
-            throw new IllegalArgumentException("Group with ID " + id + " not found");
+        try {
+            if (myGroupRepository.existsById(id)) {
+                MyGroup group = myGroupRepository.findById(id).get();
+                group.setEmployees(null);
+                myGroupRepository.deleteById(id);
+            } else {
+                // Handle the case where the group doesn't exist
+                throw new IllegalArgumentException("Group with ID " + id + " not found");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error while deleting group by ID " + id, e);
         }
     }
 
     @Override
     public List<MyGroup> findByType(String type) {
-        return myGroupRepository.findByType(type);
-        // Assuming that there is a method in MyGroupRepository named findByType
-        // that returns a list of MyGroup entities based on the 'type' parameter.
+        try {
+            return myGroupRepository.findByType(type);
+            // Assuming that there is a method in MyGroupRepository named findByType
+            // that returns a list of MyGroup entities based on the 'type' parameter.
+        } catch (Exception e) {
+            throw new RuntimeException("Error while fetching groups by type", e);
+        }
     }
 }
