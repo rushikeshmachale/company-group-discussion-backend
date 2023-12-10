@@ -1,55 +1,86 @@
-import React from 'react'
+import React, { useState } from "react";
+import MyGroupService from "../services/MyGroupService";
+import AddEmployee from "./AddEmployee";
+import { ToastContainer, toast } from "react-toastify";
 
 const CreateGroup = () => {
-    return (
-        <div><h1>Create Group and add Employees</h1>
-        <div class="container mt-5">
-            <form id="employeeForm">
-                <div class="form-group">
-                    <label for="groupName">Group Name:</label>
-                    <input type="text" class="form-control" id="groupName" name="groupName" required ></input>
-                </div>
-        
-                <div class="form-group">
-                    <label for="employeeName">Employee Name:</label>
-                    <input type="text" class="form-control" id="employeeName" name="employeeName[]" required ></input>
-                </div>
-        
-                <div class="form-group">
-                    <label for="department">Department:</label>
-                    <input type="text" class="form-control" id="department" name="department[]" required ></input>
-                </div>
-    
-                <div class="form-group">
-                    <label for="department">Employee ID:</label>
-                    <input type="number" class="form-control" id="emoid" name="department[]" required ></input>
-                </div>
-        
-                
-    
-                <div  class="form-group">
-                    <label for="c-form-grp">
-                        <span class="label-text">Group Type:</span> 
-                       
-                    </label>
-                    <select name="group" class="c-form-grp form-control " id="c-form-grp">
-                        <option class="bg-info" value="Your group...">Select Group Type...</option>
-                        <option class="bg-info" value="Web design"> Technical Group </option>
-                        <option class="bg-info" value="Web design"> Functional Group </option>
-                        
-                    </select>
-                    </div>
-        
-               
-               
-        
-                <button type="button" class="btn btn-info" >Add Employee</button>
-                <button type="button" class="btn btn-info" >Delete Employee</button>
-                <button type="button" class="btn btn-info" >Update Employee</button>
-            </form>
-        </div>
-    </div>
-      )
+  const [newGroup, setNewGroup] = useState(null);
+  const [group, setGroup] = useState({
+    name: '',
+    type: ''
+  });
+
+  const handleChange = (e) => {
+    setGroup({ ...group, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await MyGroupService.createGroup(group);
+      setNewGroup(response);
+      toast.success('Group created successfully! ' , {
+        position: toast.POSITION.TOP_CENTER
+      });
+      console.log("New Group:", response); // Print newGroup in console
+    } catch (error) {
+      toast.error('Error creating group! ' , {
+        position: toast.POSITION.TOP_CENTER
+      });
+      // console.error("Error creating group:", error);
     }
-    
-    export default CreateGroup
+  };
+
+  return (
+    <div className="container">
+    <ToastContainer className="text-start mx-5"/>
+      <form onSubmit={handleSubmit} className="form-control my-5">
+        <h5 className="text-center">Create Group</h5>
+        <div className="container my-5">
+          <div className="form-group">
+            <label htmlFor="groupName">Group Name:</label>
+            <input
+              type="text"
+              className="form-control"
+              onChange={handleChange}
+              value={group.name}
+              name="name"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="type">Group Type:</label>
+            <select
+              name="type"
+              id="type"
+              className="form-control"
+              value={group.type}
+              onChange={handleChange}
+            required>
+              <option value="" >
+                Select type
+              </option>
+              <option value="Technical">Technical</option>
+              <option value="Functional">Functional</option>
+            </select>
+          </div>
+
+          <div className="text-center">
+            <button type="submit" className="btn btn-info my-2">
+              Create
+            </button>
+            
+          </div>
+        </div>
+      </form>
+
+      {newGroup && newGroup.id && (
+                <AddEmployee newGroupId={newGroup.id}></AddEmployee>
+            )}
+    </div>
+  );
+};
+
+export default CreateGroup;

@@ -1,8 +1,10 @@
 // MyGroupServiceImpl.java
 package com.excelr.service.impl;
 
+import com.excelr.entity.Messages;
 import com.excelr.entity.MyGroup;
 import com.excelr.repository.MyGroupRepository;
+import com.excelr.service.MessageService;
 import com.excelr.service.MyGroupService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class MyGroupServiceImpl implements MyGroupService {
     public MyGroupServiceImpl(MyGroupRepository myGroupRepository) {
         this.myGroupRepository = myGroupRepository;
     }
+
+    @Autowired
+    MessageService messageService;
 
     @Override
     public List<MyGroup> getAllGroups() {
@@ -66,6 +71,13 @@ public class MyGroupServiceImpl implements MyGroupService {
             if (myGroupRepository.existsById(id)) {
                 MyGroup group = myGroupRepository.findById(id).get();
                 group.setEmployees(null);
+
+                List<Messages> messages = messageService.getAllMessagesByGroupId(id);
+                for (Messages message : messages) {
+                    messageService.deleteMessageById(message.getId());
+                }
+
+
                 myGroupRepository.deleteById(id);
             } else {
                 // Handle the case where the group doesn't exist

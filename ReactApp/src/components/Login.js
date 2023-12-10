@@ -3,6 +3,7 @@ import EmployeeService from '../services/LoginService';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
+import {ToastContainer,toast} from "react-toastify"
 
 
 
@@ -30,14 +31,18 @@ const Login = () => {
         try{
             const employee = await EmployeeService.login(username,password);
             if (employee) {
-             setEmployee(employee);
+              setEmployee(employee);
               setRole(employee.role)
-              setError('');
               handleNavigate(employee.role); 
               Cookies.set('employee',JSON.stringify(employee));
+              toast.success('Welcome ',username , {
+                position: toast.POSITION.TOP_CENTER
+              });
 
             } else {
-              setError('Role not fetched correctly');
+              toast.error("invalid credentials!!", {
+                position: toast.POSITION.TOP_CENTER
+              });
               setRole(null);
             }
             
@@ -48,6 +53,7 @@ const Login = () => {
     }
 
     console.log(role);
+    console.log(employee);
 
    const handleNavigate=(role)=>{
    if(role==='admin'){
@@ -63,43 +69,50 @@ const Login = () => {
 
 
 
-    <div className="container-fluid">
-      <div className="row justify-content-center h-100">
+<div className="container">
+
+<ToastContainer/>
+      <div className="row justify-content-center mt-5">
         <div className="col-md-6">
-           <div>
-              <h2>Login</h2>
-              {error && <div className="alert alert-danger">{error.toString()}</div>}
+          <div className="my-5">
+
+            <h2>Login</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleLogin}>
-                <div className="mb-3">
-                  <label className="form-label">Username:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="username"
-                    value={username}
-                    onChange={handleUsernameChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Password:</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    name="password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary">
-                  Login
-                </button>
-                
-              </form>
-            </div>
-          
+              <div className="mb-3">
+                <label htmlFor="username" className="form-label">
+                  Username:
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="username"
+                  name="username"
+                  value={username}
+                  onChange={handleUsernameChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Password:
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+              </div>
+              
+              <button type="submit" className="btn btn-primary">
+                Login
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-      
     </div>
   )
 }
